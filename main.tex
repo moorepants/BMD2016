@@ -27,7 +27,18 @@
 
 \section*{ABSTRACT}
 %
-We present a method to find an optimal handling bicycle using purely analytical and numerical means. Given a linear parametrized bicycle vehicle model, a simple manual controller, and a model-based metric that correlates with subjective handling measures, we formulate the search for optimal geometric parameters that give the best handling bicycle. Optimal bicycle designs for a number of design speeds are discovered including bicycles with unintuitive geometry, such as large negative trail. The resulting maximum handling quality metrics for the optimal bicycle designs follow a logarithmic relationship with respect to design speed. These optimal handling bicycles can be ridden at speeds other than the design speed and, in general, handling difficulty decreases with increasing speed. Finally, we show that there is little evidence of correlation between bicycle open-loop stability and optimal handling.
+We present a method to find an optimal handling bicycle using purely analytical
+and numerical means. Given a linear parametrized bicycle vehicle model, a
+simple manual controller, and a model-based metric that correlates with
+subjective handling measures, we formulate the search for optimal geometric
+parameters that give the best handling bicycle. Optimal bicycle designs for a
+number of design speeds are discovered including bicycles with unintuitive
+geometry, such as large negative trail. The resulting maximum handling quality
+metrics for the optimal bicycle designs follow a logarithmic relationship with
+respect to design speed. These optimal handling bicycles can be ridden at
+speeds other than the design speed and, in general, handling difficulty
+decreases with increasing speed. Finally, we show that there is little evidence
+of correlation between bicycle open-loop stability and optimal handling.
 
 \begin{keywords}
   bicycle,
@@ -39,33 +50,101 @@ We present a method to find an optimal handling bicycle using purely analytical 
 
 \section{INTRODUCTION}
 %
-Although the bicycle was invented nearly 200 years ago, by roughly 1890 its design had evolved to the ``safety bicycle'', with similar geometry and mass properties to those of most bikes used today. The increasing future adoption of the bicycle as the favored vehicle for short trips depends heavily on its rideability, that is, the degree to which the average rider is easily able to manipulate and maneuver the vehicle to accomplish the various tasks necessary for its use in transportation. At present, small design  modifications by designers in the size and shape of the bike are made in an \textit{ad hoc}, trial and error, way. Although some efforts have been made recently to understand the effects of these various design parameters on the vehicle's passive stability (with a fixed rider) at low speeds, less is understood regarding how these same parameters affect bicycle rideability.
+Although the bicycle was invented nearly 200 years ago, by roughly 1890 its
+design had evolved to the ``safety bicycle'', with similar geometry and mass
+properties to those of most bikes used today. The increasing future adoption of
+the bicycle as the favored vehicle for short trips depends heavily on its
+rideability, that is, the degree to which the average rider is easily able to
+manipulate and maneuver the vehicle to accomplish the various tasks necessary
+for its use in transportation. At present, small design  modifications by
+designers in the size and shape of the bike are made in an \textit{ad hoc},
+trial and error, way. Although some efforts have been made recently to
+understand the effects of these various design parameters on the vehicle's
+passive stability (with a fixed rider) at low speeds, less is understood
+regarding how these same parameters affect bicycle rideability.
 
-The lateral handling qualities of bicycles and motorcycles are one of the most important determinants of their rideability, safety, and usefulness. The subject ``handling qualities'' had its birth in the assessment of aircraft. In these applications, handling qualities referred to those qualities or characteristics that determine the ease and precision with which a pilot may complete a given task~\cite{Cooper1969}. Substitute ``bicycle'' or ``motorcycle'' for ``aircraft'' and ``rider'' for ``pilot'' and a workable definition of single-track vehicle handling qualities is evident~\cite{Hess2012}.
+The lateral handling qualities of bicycles and motorcycles are one of the most
+important determinants of their rideability, safety, and usefulness. The
+subject ``handling qualities'' had its birth in the assessment of aircraft. In
+these applications, handling qualities referred to those qualities or
+characteristics that determine the ease and precision with which a pilot may
+complete a given task~\cite{Cooper1969}. Substitute ``bicycle'' or
+``motorcycle'' for ``aircraft'' and ``rider'' for ``pilot'' and a workable
+definition of single-track vehicle handling qualities is
+evident~\cite{Hess2012}.
 
-In this paper we combine three theoretical constructs to study the lateral handling qualities: a) the Whipple dynamic model~\cite{Whipple1899,Meijaard2007} of the bicycle itself, b) a rider feedback control model that describes how the steering torques used to balance and track desired motions are chosen, and c) a measure of the resulting handling qualities, the ease with which this control is accomplished. We then use computational optimization techniques to search in the vehicle design parameter space for designs that make the handling qualities as good as possible, given the design constraints. 
+In this paper we combine three theoretical constructs to study the lateral
+handling qualities: a) the Whipple dynamic
+model~\cite{Whipple1899,Meijaard2007} of the bicycle itself, b) a rider
+feedback control model that describes how the steering torques used to balance
+and track desired motions are chosen, and c) a measure of the resulting
+handling qualities, the ease with which this control is accomplished. We then
+use computational optimization techniques to search in the vehicle design
+parameter space for designs that make the handling qualities as good as
+possible, given the design constraints.
 
-A model of bicycle rider lateral balance and tracking control was presented in Reference~\cite{Hess2012}, and included a frequency-domain based Handling Qualities Metric (HQM) for evaluating bicycle handling qualities based upon a similar metric used for the evaluation of aircraft handling qualities in Reference~\cite{Hess2006}. Figures \ref{fig:inner-loops} and \ref{fig:outer-loops} show the rider model as a five-loop feedback system where the rider control ``dynamics'' are captured by a simple model of the rider's neuromuscular system and five feedback ``gains.'' In the figures, $T_\delta$, $\phi$, $\psi$ and $y_q$ represent rider steer torque input, vehicle roll, vehicle heading, and vehicle lateral deviation, respectively using the notation defined in Reference~\cite{Meijaard2007}. Reference~\cite{Hess2012} exercises the model using the physical parameters of six actual bicycles, showing that variations in both vehicle speed and physical parameters can have effects on handling, with the former being dominant for standard bicycle designs.
+A model of bicycle rider lateral balance and tracking control was presented in
+Reference~\cite{Hess2012}, and included a frequency-domain based Handling
+Qualities Metric (HQM) for evaluating bicycle handling qualities based upon a
+similar metric used for the evaluation of aircraft handling qualities in
+Reference~\cite{Hess2006}. Figures \ref{fig:inner-loops} and
+\ref{fig:outer-loops} show the rider model as a five-loop feedback system where
+the rider control ``dynamics'' are captured by a simple model of the rider's
+neuromuscular system and five feedback ``gains.'' In the figures, $T_\delta$,
+$\phi$, $\psi$ and $y_q$ represent rider steer torque input, vehicle roll,
+vehicle heading, and vehicle lateral deviation, respectively using the notation
+defined in Reference~\cite{Meijaard2007}. Reference~\cite{Hess2012} exercises
+the model using the physical parameters of six actual bicycles, showing that
+variations in both vehicle speed and physical parameters can have effects on
+handling, with the former being dominant for standard bicycle designs.
 %
 \begin{figure}[b]
   \centering
   \includegraphics{figures/inner-loops.pdf}
-  \caption{The three inner loops of the manual control system account for the use of vestibular, proprioceptive and visual sensory information in balance control.}
+  \caption{The three inner loops of the manual control system account for the
+    use of vestibular, proprioceptive and visual sensory information in balance
+    control.}
   \label{fig:inner-loops}
 \end{figure}
 %
 \begin{figure}
   \centering
   \includegraphics{figures/outer-loops.pdf}
-  \caption{The outer two loops rely only on visual sensing and model the tracking performance.}
+  \caption{The outer two loops rely only on visual sensing and model the
+    tracking performance.}
   \label{fig:outer-loops}
 \end{figure}
 
-These observations allow us to postulate that there is a set of optimal physical parameters that minimize the peak of the analytically predicted HQM. The research herein details a constrained optimization approach that discovers the optimal handling bicycle for various design speeds. The approach makes use of the model and gain selection technique presented in Reference~\cite{Hess2012} coupled with constraints that bound a solution space of physically realizable bicycles. We present candidate optimal bicycle designs and compare them to the evolutionarily derived bicycle design that we know today.
+These observations allow us to postulate that there is a set of optimal
+physical parameters that minimize the peak of the analytically predicted HQM.
+The research herein details a constrained optimization approach that discovers
+the optimal handling bicycle for various design speeds. The approach makes use
+of the model and gain selection technique presented in
+Reference~\cite{Hess2012} coupled with constraints that bound a solution space
+of physically realizable bicycles. We present candidate optimal bicycle designs
+and compare them to the evolutionarily derived bicycle design that we know
+today.
 
 \section{BICYCLE (PLANT) DESCRIPTION}
 %
-In this work, we make use of the linearized Whipple bicycle model~\cite{Whipple1899} with parametrizations and numerical values as presented in Reference~\cite{Meijaard2007}. This bicycle dynamic model has two non-ignorable coordinates, roll angle $\phi$ and steer angle $\delta$, in addition to which we add the two ignorable coordinates, heading angle $\psi$ and front wheel lateral deviation $y_q$, needed to describe tracking behavior. The plant is manipulated with a single input, steer torque, $T_\delta$. The plant model is parametrized by 25 geometric and inertial parameters in addition to the nominal speed $v$ and acceleration due to gravity $g$. This model is capable of exhibiting open-loop stability and non-minimum phase behavior, two important dynamical properties of single track vehicles, and is thus considered rich enough for realistic control studies. In the optimization analysis below we focus on four geometric parameters to explore optimal bicycle designs: trail $c$, wheelbase $w$, steer axis tilt $\lambda$, and front wheel radius $r_F$, which are depicted in Figure~\ref{fig:bicycle-geometry}. It is important to note that the other 21 parameters remain fixed in the analysis. For example, the front wheel moments of inertia do not grow or shrink with changes in front wheel radius. 
+In this work, we make use of the linearized Whipple bicycle
+model~\cite{Whipple1899} with parametrizations and numerical values as
+presented in Reference~\cite{Meijaard2007}. This bicycle dynamic model has two
+non-ignorable coordinates, roll angle $\phi$ and steer angle $\delta$, in
+addition to which we add the two ignorable coordinates, heading angle $\psi$
+and front wheel lateral deviation $y_q$, needed to describe tracking behavior.
+The plant is manipulated with a single input, steer torque, $T_\delta$. The
+plant model is parametrized by 25 geometric and inertial parameters in addition
+to the nominal speed $v$ and acceleration due to gravity $g$. This model is
+capable of exhibiting open-loop stability and non-minimum phase behavior, two
+important dynamical properties of single track vehicles, and is thus considered
+rich enough for realistic control studies. In the optimization analysis below
+we focus on four geometric parameters to explore optimal bicycle designs: trail
+$c$, wheelbase $w$, steer axis tilt $\lambda$, and front wheel radius $r_F$,
+which are depicted in Figure~\ref{fig:bicycle-geometry}. It is important to
+note that the other 21 parameters remain fixed in the analysis. For example,
+the front wheel moments of inertia do not grow or shrink with changes in front
+wheel radius.
 %
 \begin{figure}
   \centering
@@ -77,18 +156,31 @@ In this work, we make use of the linearized Whipple bicycle model~\cite{Whipple1
 \section{CONTROLLER DESCRIPTION}
 \label{sec:controller-description}
 %
-We make use of the manual controller proposed in Reference~\cite{Hess2012} to simulate the behavior of a human rider. The form of this controller was chosen to meet the following requirements:
+We make use of the manual controller proposed in Reference~\cite{Hess2012} to
+simulate the behavior of a human rider. The form of this controller was chosen
+to meet the following requirements:
 %
 \begin{enumerate}
-  \item Control is compensatory in nature with no feed-forward or preview elements.
-  \item Roll stabilization is the primary task, with path following addressed in the outer loops. The system should be stable in roll before closing the path following loops.
-  \item The input to the bicycle model is steer torque, $T_\delta$ (as opposed to steer angle, $\delta$).
-  \item The closed roll rate loop should exhibit similarities to the rate feedback loops found in more general laboratory tracking tasks of a human operator.
-  \item The system should be simple. In our case, only simple gains are needed to stabilize the system and close all the loops.
-  \item We should see evidence of the crossover model~\cite{McRuer1974} in the roll, heading, and lateral deviation loops.
+  \item Control is compensatory in nature with no feed-forward or preview
+    elements.
+  \item Roll stabilization is the primary task, with path following addressed
+    in the outer loops. The system should be stable in roll before closing the
+    path following loops.
+  \item The input to the bicycle model is steer torque, $T_\delta$ (as opposed
+    to steer angle, $\delta$).
+  \item The closed roll rate loop should exhibit similarities to the rate
+    feedback loops found in more general laboratory tracking tasks of a human
+    operator.
+  \item The system should be simple. In our case, only simple gains are needed
+    to stabilize the system and close all the loops.
+  \item We should see evidence of the crossover model~\cite{McRuer1974} in the
+    roll, heading, and lateral deviation loops.
 \end{enumerate}
 
-To achieve the above controller requirements, the five sequential loop controller structure in Figs.~\ref{fig:inner-loops} and \ref{fig:outer-loops} was implemented around a simple second order neuromuscular model, $G_{nm}(s)$, and the bicycle plant, where
+To achieve the above controller requirements, the five sequential loop
+controller structure in Figs.~\ref{fig:inner-loops} and \ref{fig:outer-loops}
+was implemented around a simple second order neuromuscular model, $G_{nm}(s)$,
+and the bicycle plant, where
 %
 \begin{align}
   G_{nm}(s) = \frac{\omega_{nm}^2}{s^2 + 2\zeta_{nm}\omega_{nm}s + \omega_{nm}^2}
@@ -96,17 +188,32 @@ To achieve the above controller requirements, the five sequential loop controlle
 %
 with $\omega_{nm}=30~\si{\radian\per\second}$ and $\zeta_{nm}=0.707$.
 
-The two inner-most gains, $k_\delta$ and $k_{\dot{\phi}}$, are chosen such that a pair of poles in each of the two first sequential closed loops lie on the lines in the complex plane that have damping ratios specified as $\zeta_\delta=0.1289$ and $\zeta_{\dot{\phi}}=0.0855$. There is a unique solution, which can be found by solving the set of 12 nonlinear equations that are formed using an Ackermann-like pole placement approach. This constraint on the controller design ensures that the fourth controller requirement is met and that the inner loop poles are in a location suitable for closing the outer loops to meet the fifth requirement. The outer three gains are selected such that the open roll loop transfer function crosses over at 2~\si{\radian\per\second} and the two outer-most open-loops cross over at 1 ~\si{\radian\per\second} and 0.5 ~\si{\radian\per\second}, respectively. Further, details on the gain selection are given in \cite{Hess2012} and \cite{Moore2012}. It is also important to note, as will be shown in the next section, that this controller structure has been demonstrated to realistically predict actual human control activity in Reference~\cite{Moore2012}.
+The two inner-most gains, $k_\delta$ and $k_{\dot{\phi}}$, are chosen such that
+a pair of poles in each of the two first sequential closed loops lie on the
+lines in the complex plane that have damping ratios specified as
+$\zeta_\delta=0.1289$ and $\zeta_{\dot{\phi}}=0.0855$. There is a unique
+solution, which can be found by solving the set of 12 nonlinear equations that
+are formed using an Ackermann-like pole placement approach. This constraint on
+the controller design ensures that the fourth controller requirement is met and
+that the inner loop poles are in a location suitable for closing the outer
+loops to meet the fifth requirement. The outer three gains are selected such
+that the open roll loop transfer function crosses over at
+2~\si{\radian\per\second} and the two outer-most open-loops cross over at 1
+~\si{\radian\per\second} and 0.5 ~\si{\radian\per\second}, respectively.
+Further, details on the gain selection are given in \cite{Hess2012} and
+\cite{Moore2012}. It is also important to note, as will be shown in the next
+section, that this controller structure has been demonstrated to realistically
+predict actual human control activity in Reference~\cite{Moore2012}.
 
 \section{HANDLING QUALITIES}
 %
 In general, the handling qualities of a manually controlled vehicle, be it an
 aircraft, automobile or bicycle, refer to the ease and precision with which the
 human can complete a given control task. The Cooper-Harper rating scale of
-Figure~\ref{fig:cooper-harper-rating-scale} from Reference~\cite{Cooper1969} has
-been universally adopted as a means of quantifying pilot opinion of aircraft
-handling qualities. It has also been used in estimating the handling qualities
-of automobiles using a model of the human driver in
+Figure~\ref{fig:cooper-harper-rating-scale} from Reference~\cite{Cooper1969}
+has been universally adopted as a means of quantifying pilot opinion of
+aircraft handling qualities. It has also been used in estimating the handling
+qualities of automobiles using a model of the human driver in
 Reference~\cite{Modjtahedzadeh1993}. Other rating scales have also been
 utilized to delineate ease of control from the human's standpoint. For example,
 the work of Reference~\cite{Weir1978} employed a composite of four rating
@@ -130,17 +237,17 @@ prediction scheme that was utilized borrowed heavily upon studies involving
 aircraft. A useful introduction and history can be found in
 Reference~\cite{Hess1990}, where a fundamental handling qualities theory
 introduced by Smith in Reference~\cite{Smith1976} was explored in the context
-of a specific pilot model discussed in Reference~\cite{Hess1985}. 
+of a specific pilot model discussed in Reference~\cite{Hess1985}.
 
-Simply stated,
-the handling qualities theory just mentioned is that, in any closed-loop
-tracking task, e.g., flying an aircraft, driving a car, riding a bicycle, \textbf{rate
-control of any ``primary vehicle response variable'' is of fundamental
-importance from the standpoint of perceived vehicle handling qualities}.
+Simply stated, the handling qualities theory just mentioned is that, in any
+closed-loop tracking task, e.g., flying an aircraft, driving a car, riding a
+bicycle, \textbf{rate control of any ``primary vehicle response variable'' is
+of fundamental importance from the standpoint of perceived vehicle handling
+qualities}.
 
-As an example, in flying an aircraft, one such primary vehicle response variable
-would be aircraft pitch attitude. Thus, pitch-rate control activity is one
-determinant of handling qualities. The author of Reference~\cite{Smith1976}
+As an example, in flying an aircraft, one such primary vehicle response
+variable would be aircraft pitch attitude. Thus, pitch-rate control activity is
+one determinant of handling qualities. The author of Reference~\cite{Smith1976}
 further held that a physiological measure for pilot opinion ratings is the rate
 at which nerve impulses (or an equivalent measure) arrive at a point in the
 central nervous system where all signals due to rate control are summed or
@@ -163,7 +270,11 @@ Reflecting this thesis, the work of Reference~\cite{Hess2006} held that the
 amount of ``power'' in the output rate feedback signal ($U_M$) in a model of
 the human controller such as that of Figure~\ref{fig:aircraft-controller} could
 be mapped into an estimate of the human's perception of handling qualities.
-Rather than estimating the power in $U_M$, Reference~\cite{Hess2006} proposed a Handling Qualities Metric (HQM) to be the magnitude of the transfer function between the commanded input and the primary rate loop variable as a function of frequency, normalized by $|K_p|$. Or referring to Figure~\ref{fig:aircraft-controller},
+Rather than estimating the power in $U_M$, Reference~\cite{Hess2006} proposed a
+Handling Qualities Metric (HQM) to be the magnitude of the transfer function
+between the commanded input and the primary rate loop variable as a function of
+frequency, normalized by $|K_p|$. Or referring to
+Figure~\ref{fig:aircraft-controller},
 %
 \begin{equation}
   \textrm{HQM} = \left| \frac{U_M}{C}(j\omega) \right| \frac{1}{|K_p|}
@@ -173,19 +284,19 @@ Rather than estimating the power in $U_M$, Reference~\cite{Hess2006} proposed a 
 The advantage of the HQM as opposed to calculating the power in $U_M$ for a
 particular task is that the HQM is readily found based upon the human/vehicle
 model itself, absent the necessity of a complete simulation of the task at
-hand. The $|\frac{U_M}{C}|$ reflects how the command signal $C$ produces power in the
-output rate $U_M = \frac{dM}{dt}$ which the pilot uses to control $M$.
+hand. The $|\frac{U_M}{C}|$ reflects how the command signal $C$ produces power
+in the output rate $U_M = \frac{dM}{dt}$ which the pilot uses to control $M$.
 Reference~\cite{Hess2006} demonstrated that the HQM could be used to predict
 Cooper-Harper ratings obtained from a well-controlled, pilot-in-the-loop
 tracking study summarized in Reference~\cite{McDonnell1968} in which a variety
 of controlled-element dynamics were employed and Cooper-Harper pilot opinion
 ratings were recorded.  Figure~\ref{fig:hqm-various-plants} is the result.  The
-horizontal bounds in Figure~\ref{fig:hqm-various-plants} were created in Reference~\cite{Hess2006} based
-upon the maximum values of the HQMs and the recorded handling qualities rating.
-Here handling qualities ``levels'' are defined using definitions associated
-with the Cooper-Harper scale, i.e., Level 1 means numerical Cooper-Harper
-ratings from 1 to 3.5, Level 2 means numerical ratings from 3.5 to 6.5 and
-Level 3 means numerical ratings larger than 6.5.
+horizontal bounds in Figure~\ref{fig:hqm-various-plants} were created in
+Reference~\cite{Hess2006} based upon the maximum values of the HQMs and the
+recorded handling qualities rating.  Here handling qualities ``levels'' are
+defined using definitions associated with the Cooper-Harper scale, i.e., Level
+1 means numerical Cooper-Harper ratings from 1 to 3.5, Level 2 means numerical
+ratings from 3.5 to 6.5 and Level 3 means numerical ratings larger than 6.5.
 Figure~\ref{fig:hqm-various-plants} shows that as reported handling qualities
 improve the peak magnitude of the associated HQM decreases.
 %
@@ -196,7 +307,18 @@ improve the peak magnitude of the associated HQM decreases.
   \label{fig:hqm-various-plants}
 \end{figure}
 
-The division by $|K_p|$ in Equation~\ref{eq:hqm-def} follows the procedure established in Reference~\cite{Hess2006}. In the latter reference, the $\frac{1}{|K_p|}$ factor was introduced to allow an effective comparison of different controlled elements (the ``vehicle'' of Figure~\ref{fig:aircraft-controller}) using the experimental, single-axis tracking data of Reference~\cite{McDonnell1968}. The open-loop human/vehicle transfer functions in these tasks exhibited variable crossover frequencies. Dividing by $|K_p|$ in the modeling procedure effectively mitigated the effect of this crossover frequency variation in the handling qualities prediction scheme that was developed. It is thus essential to retain $\frac{1}{|K_p|}$ factor to utilize the handling qualities bounds shown in Figure~\ref{fig:hqm-various-plants} for the bicycle handling study.
+The division by $|K_p|$ in Equation~\ref{eq:hqm-def} follows the procedure
+established in Reference~\cite{Hess2006}. In the latter reference, the
+$\frac{1}{|K_p|}$ factor was introduced to allow an effective comparison of
+different controlled elements (the ``vehicle'' of
+Figure~\ref{fig:aircraft-controller}) using the experimental, single-axis
+tracking data of Reference~\cite{McDonnell1968}. The open-loop human/vehicle
+transfer functions in these tasks exhibited variable crossover frequencies.
+Dividing by $|K_p|$ in the modeling procedure effectively mitigated the effect
+of this crossover frequency variation in the handling qualities prediction
+scheme that was developed. It is thus essential to retain $\frac{1}{|K_p|}$
+factor to utilize the handling qualities bounds shown in
+Figure~\ref{fig:hqm-various-plants} for the bicycle handling study.
 
 As described in Reference~\cite{Hess2012}, the pilot model of
 Figure~\ref{fig:aircraft-controller} was modified and extended to provide a
@@ -208,22 +330,34 @@ required.'' Level 3 would be described as ``significant rider compensation
 required.'' Here, ``rider compensation'' refers to the amount of rate feedback
 activity in what has been termed the ``primary control loop'' employed by the
 rider to ensure stability and desired performance. In a sequential loop closure
-paradigm as employed in Figs.~\ref{fig:inner-loops} and
-\ref{fig:outer-loops}, the primary control loop is the inner-most control loop
-(excluding manipulator deflection feedback) in which the human utilizes vehicle
-response to generate control inputs. Finally, it is important to emphasize that
-use of the bounds of Figure~\ref{fig:hqm-various-plants} requires that the
-crossover frequency of the primary control loop be 2~\si{\radian\per\second}.
-This is due to the fact that a 2~\si{\radian\per\second} crossover frequency
-was used in the pilot models that created Figure~\ref{fig:hqm-various-plants}.
-In terms of the bicycle model of Figures~\ref{fig:inner-loops} and
-\ref{fig:outer-loops}, the primary control loop is bicycle roll attitude
-$\phi$, with roll-rate providing the rate feedback system shown in
-Figure~\ref{fig:aircraft-controller}.
+paradigm as employed in Figs.~\ref{fig:inner-loops} and \ref{fig:outer-loops},
+the primary control loop is the inner-most control loop (excluding manipulator
+deflection feedback) in which the human utilizes vehicle response to generate
+control inputs. Finally, it is important to emphasize that use of the bounds of
+Figure~\ref{fig:hqm-various-plants} requires that the crossover frequency of
+the primary control loop be 2~\si{\radian\per\second}.  This is due to the fact
+that a 2~\si{\radian\per\second} crossover frequency was used in the pilot
+models that created Figure~\ref{fig:hqm-various-plants}.  In terms of the
+bicycle model of Figures~\ref{fig:inner-loops} and \ref{fig:outer-loops}, the
+primary control loop is bicycle roll attitude $\phi$, with roll-rate providing
+the rate feedback system shown in Figure~\ref{fig:aircraft-controller}.
 
 \section{OPTIMAL HANDLING QUALITIES}
 %
-With the peak of the HQM definition provided in the previous section, a single value that measures ease of handling for a bicycle model at a given speed, we have an analytical structure that can be utilized to ask questions about the bicycle's optimal design to minimize the peak HQM. In particular, we investigate the design space of several geometric parameters to find the minimal peak HQM for a bicycle at a desired design speed. We choose  to investigate four of the 25 parameters of the benchmark Whipple model~\cite{Meijaard2007} that are commonly associated with importance in handling: $p=[c \quad w \quad \lambda \quad r_F]$ (see Figure~\ref{fig:bicycle-geometry}). We include bounds on these geometric parameters so that many physically unrealizable bicycles are eliminated from the allowable parameter space. For simplicity we begin with only four bounds, but in future work we plan to explore a more complete set of constraints. This minimization can be mathematically formulated as
+With the peak of the HQM definition provided in the previous section, a single
+value that measures ease of handling for a bicycle model at a given speed, we
+have an analytical structure that can be utilized to ask questions about the
+bicycle's optimal design to minimize the peak HQM. In particular, we
+investigate the design space of several geometric parameters to find the
+minimal peak HQM for a bicycle at a desired design speed. We choose  to
+investigate four of the 25 parameters of the benchmark Whipple
+model~\cite{Meijaard2007} that are commonly associated with importance in
+handling: $p=[c \quad w \quad \lambda \quad r_F]$ (see
+Figure~\ref{fig:bicycle-geometry}). We include bounds on these geometric
+parameters so that many physically unrealizable bicycles are eliminated from
+the allowable parameter space. For simplicity we begin with only four bounds,
+but in future work we plan to explore a more complete set of constraints. This
+minimization can be mathematically formulated as
 %
 \begin{equation}
   \begin{aligned}
@@ -236,28 +370,84 @@ With the peak of the HQM definition provided in the previous section, a single v
   \end{aligned}
 \end{equation}
 %
-where the trail $c$ can take on any real value, the wheelbase $w$ is constrained such that the center of mass of the vehicle is always between the wheel contact points, the steer axis tilt $\lambda$ can take on any effective angle, and the front wheel radius $r_F$ cannot be zero or negative. The parameters $m_H, m_B$ are the masses of the front assembly and the rear frame with rider and $x_H, x_B$ are the longitudinal locations of those two mass centers as defined in Reference~\cite{Meijaard2007}.
+where the trail $c$ can take on any real value, the wheelbase $w$ is
+constrained such that the center of mass of the vehicle is always between the
+wheel contact points, the steer axis tilt $\lambda$ can take on any effective
+angle, and the front wheel radius $r_F$ cannot be zero or negative. The
+parameters $m_H, m_B$ are the masses of the front assembly and the rear frame
+with rider and $x_H, x_B$ are the longitudinal locations of those two mass
+centers as defined in Reference~\cite{Meijaard2007}.
 
-It is important to note that it is not always possible to find a suitable controller using the methods described in Section~\ref{sec:controller-description} for every bicycle in the above defined parameter space due to both the lack of robustness of the gain selection algorithm and the limitations incurred from the controller being representative of a human. To accommodate this deficiency, any set of selected gains that create a closed loop system that is not stable is assigned an peak HQM that is proportional to the largest real part of the unstable poles of the system with a minimum peak HQM of 10. 
+It is important to note that it is not always possible to find a suitable
+controller using the methods described in
+Section~\ref{sec:controller-description} for every bicycle in the above defined
+parameter space due to both the lack of robustness of the gain selection
+algorithm and the limitations incurred from the controller being representative
+of a human. To accommodate this deficiency, any set of selected gains that
+create a closed loop system that is not stable is assigned an peak HQM that is
+proportional to the largest real part of the unstable poles of the system with
+a minimum peak HQM of 10.
 
-Using this problem formulation we find the optimal bicycle design at a given speed using the Covariance Matrix Adaptation Evolution Strategy~\cite{Hansen1996}, a derivative-free stochastic optimization algorithm. The algorithm is suited to this problem due to the non-linearity of the objective function and the difficulty in computing its gradient. The initial guess for the optimization runs is set to the nominal benchmark parameter values found in Reference~\cite{Meijaard2007} and $\sigma_p$, the initial standard deviation of the search spread, is set to $\sigma_p=[0.5 \quad 3.0 \quad 0.3\pi \quad 0.2]$.
+Using this problem formulation we find the optimal bicycle design at a given
+speed using the Covariance Matrix Adaptation Evolution
+Strategy~\cite{Hansen1996}, a derivative-free stochastic optimization
+algorithm. The algorithm is suited to this problem due to the non-linearity of
+the objective function and the difficulty in computing its gradient. The
+initial guess for the optimization runs is set to the nominal benchmark
+parameter values found in Reference~\cite{Meijaard2007} and $\sigma_p$, the
+initial standard deviation of the search spread, is set to $\sigma_p=[0.5 \quad
+3.0 \quad 0.3\pi \quad 0.2]$.
 
 \section{RESULTS}
 %
 \subsection{Example Optimal Bicycle}
 %
-An example optimal bicycle found for a design speed of 5.0 m/s is shown in Figure~\ref{fig:example-optimal-bicycle}. With the optimal combination of geometric parameters, $c=-0.239\si{\meter},\lambda=0.678\si{\radian},r_F=0.188\si{\meter},w=1.507\si{\meter}$, the peak of the handling quality metric can be lowered from 4.64 to 0.41. The wheelbase is larger than the nominal benchmark bicycle, the trail is rather largely negative, the steer axis is more laid back, and the front wheel diameter is roughly halved. This optimal handling bicycle is not open-loop stable at any speed from 0~\si{\meter\per\second} to 10~\si{\meter\per\second} and the weave oscillation frequency is increased by a factor of about two. The eigenvalues do not change as drastically with respect to speed as do those of the benchmark model with nominal parameters.
+An example optimal bicycle found for a design speed of 5.0 m/s is shown in
+Figure~\ref{fig:example-optimal-bicycle}. With the optimal combination of
+geometric parameters,
+$c=-0.239\si{\meter},\lambda=0.678\si{\radian},r_F=0.188\si{\meter},w=1.507\si{\meter}$,
+the peak of the handling quality metric can be lowered from 4.64 to 0.41. The
+wheelbase is larger than the nominal benchmark bicycle, the trail is rather
+largely negative, the steer axis is more laid back, and the front wheel
+diameter is roughly halved. This optimal handling bicycle is not open-loop
+stable at any speed from 0~\si{\meter\per\second} to 10~\si{\meter\per\second}
+and the weave oscillation frequency is increased by a factor of about two. The
+eigenvalues do not change as drastically with respect to speed as do those of
+the benchmark model with nominal parameters.
 %
 \begin{figure}
   \centering
   \includegraphics{figures/example-optimal-bicycle.pdf}
-  \caption{Comparison of an optimal bicycle designed for traveling at 5.0 m/s (black) to the benchmark bicycle design (grey) which represents a relatively normal bicycle. The top figure shows the differences in the fundamental geometry of the two bicycles. The B, H, R, and F symbols represent the mass centers of the rear frame and rider, the front assembly, the rear wheel, and the front wheel, respectively. The lower left plot shows how the uncontrolled plant dynamics, i.e. eigenvalues, vary with respect to speed for both bicycles. The lower right plot shows the handling quality metric for both bicycle designs at 5.0~\si{\meter\per\second}.}
+  \caption{Comparison of an optimal bicycle designed for traveling at 5.0 m/s
+    (black) to the benchmark bicycle design (grey) which represents a
+    relatively normal bicycle. The top figure shows the differences in the
+    fundamental geometry of the two bicycles. The B, H, R, and F symbols
+    represent the mass centers of the rear frame and rider, the front assembly,
+    the rear wheel, and the front wheel, respectively. The lower left plot
+    shows how the uncontrolled plant dynamics, i.e. eigenvalues, vary with
+    respect to speed for both bicycles. The lower right plot shows the handling
+    quality metric for both bicycle designs at 5.0~\si{\meter\per\second}.}
   \label{fig:example-optimal-bicycle}
 \end{figure}
 
 \subsection{Optimal Bicycles}
 %
-Figure~\ref{fig:all-optimal-bicycles} shows optimal designs found for travel speeds of \SIlist{2;4;6;8;10}{\meter\per\second}. The corresponding optimal parameters for each of these designs are provided in Table~\ref{tab:optimal-parameters}. The bicycle designs do not seem to follow a continuous trend in change in geometry, which could possibly be due to finding only local minima. The designs for 4~\si{\meter\per\second} and 10~\si{\meter\per\second} share similarities, for example the large front wheel diameter and a relatively large negative trail. It is important to note that we did not allow the inertial properties of the wheel to vary, but rather only the geometry. The 6~\si{\meter\per\second} and 8~\si{\meter\per\second} both have positive trail and very small front wheels. The 2~\si{\meter\per\second} design has a very short wheelbase at the parameter boundary and large positive trail. This design may not be physically realizable. It is important to note that finding a closed loop stable design at 2~\si{\meter\per\second} is very difficult due to the limitations of the controller. The minimal value of the HQM decreases approximately logarithmically with increases in speed.
+Figure~\ref{fig:all-optimal-bicycles} shows optimal designs found for travel
+speeds of \SIlist{2;4;6;8;10}{\meter\per\second}. The corresponding optimal
+parameters for each of these designs are provided in
+Table~\ref{tab:optimal-parameters}. The bicycle designs do not seem to follow a
+continuous trend in change in geometry, which could possibly be due to finding
+only local minima. The designs for 4~\si{\meter\per\second} and
+10~\si{\meter\per\second} share similarities, for example the large front wheel
+diameter and a relatively large negative trail. It is important to note that we
+did not allow the inertial properties of the wheel to vary, but rather only the
+geometry. The 6~\si{\meter\per\second} and 8~\si{\meter\per\second} both have
+positive trail and very small front wheels. The 2~\si{\meter\per\second} design
+has a very short wheelbase at the parameter boundary and large positive trail.
+This design may not be physically realizable. It is important to note that
+finding a closed loop stable design at 2~\si{\meter\per\second} is very
+difficult due to the limitations of the controller. The minimal value of the
+HQM decreases approximately logarithmically with increases in speed.
 %
 \begin{table}
   \caption{The optimal geometric parameters found for each design speed $v$.}
@@ -277,7 +467,9 @@ Figure~\ref{fig:all-optimal-bicycles} shows optimal designs found for travel spe
 \begin{figure}
   \centering
   \includegraphics{figures/all-optimal-bicycles.pdf}
-  \caption{Optimal bicycle designs for design speeds of \SIlist{2;4;6;8;10}{\meter\per\second} along with the minimal peak HQM value at that speed plotted on a logarithmic scale.}
+  \caption{Optimal bicycle designs for design speeds of
+    \SIlist{2;4;6;8;10}{\meter\per\second} along with the minimal peak HQM
+    value at that speed plotted on a logarithmic scale.}
   \label{fig:all-optimal-bicycles}
 \end{figure}
 
@@ -285,14 +477,54 @@ Figure~\ref{fig:all-optimal-bicycles} shows optimal designs found for travel spe
 %
 \subsection{Handling and Stability}
 %
-In general, other manually controlled vehicles with good performance are not necessarily open-loop stable. In fact, some maneuverable modern fighter jets are unstable when their human-in-the-loop control system is removed~\cite{Wikipedia2016}. Race cars are often designed such that they are ``on the edge of stability'', meaning that without fine feedback control from the driver in extreme maneuvers the vehicle would skid. The Wright Brothers recognized the fact that stability can be at odds with maneuverability. They built an unstable aircraft with emphasis on the pilot's ability to control the vehicle and ultimately demonstrated one of the first successful powered flights~\cite{Anderson1986}. But vehicles that are not designed for high maneuverability are often open-loop stable permitting the human to allow the vehicle to recover from small disturbances on its own; active control is required only in more pressing activities. Reference~\cite{Wilson2004} argues this view as a possible method that humans utilize to control bicycles.
-The above handling quality metric reflects the level of compensation required by the rider. With the reasoning above one might be inclined to believe a bicycle design with optimal handling qualities would be open-loop stable at the design speed. Yet, none of the discovered designs are stable at the design speed. The \SIlist{6;8}{\meter\per\second} designs are marginally unstable in the capsize mode at the design speed, whereas the rest are unstable in the weave mode. And interestingly, the \SIlist{4;5;10}{\meter\per\second} cases exhibit no stable speeds at all up to 10~\si{\meter\per\second}. Given the hypothesized handling quality metric, a conclusion is that theoretically well handling bicycles do not necessarily exhibit open-loop stability nor is there any clear connection to the plant's stability and the handling qualities of the vehicle.
+In general, other manually controlled vehicles with good performance are not
+necessarily open-loop stable. In fact, some maneuverable modern fighter jets
+are unstable when their human-in-the-loop control system is
+removed~\cite{Wikipedia2016}. Race cars are often designed such that they are
+``on the edge of stability'', meaning that without fine feedback control from
+the driver in extreme maneuvers the vehicle would skid. The Wright Brothers
+recognized the fact that stability can be at odds with maneuverability. They
+built an unstable aircraft with emphasis on the pilot's ability to control the
+vehicle and ultimately demonstrated one of the first successful powered
+flights~\cite{Anderson1986}. But vehicles that are not designed for high
+maneuverability are often open-loop stable permitting the human to allow the
+vehicle to recover from small disturbances on its own; active control is
+required only in more pressing activities. Reference~\cite{Wilson2004} argues
+this view as a possible method that humans utilize to control bicycles.
+
+The above handling quality metric reflects the level of compensation required
+by the rider. With the reasoning above one might be inclined to believe a
+bicycle design with optimal handling qualities would be open-loop stable at the
+design speed. Yet, none of the discovered designs are stable at the design
+speed. The \SIlist{6;8}{\meter\per\second} designs are marginally unstable in
+the capsize mode at the design speed, whereas the rest are unstable in the
+weave mode. And interestingly, the \SIlist{4;5;10}{\meter\per\second} cases
+exhibit no stable speeds at all up to 10~\si{\meter\per\second}. Given the
+hypothesized handling quality metric, a conclusion is that theoretically well
+handling bicycles do not necessarily exhibit open-loop stability nor is there
+any clear connection to the plant's stability and the handling qualities of the
+vehicle.
 
 \subsection{Speed and Handling}
 %
-The lack of continuity of the parameters of the optimal bicycles at adjacent design speeds in Figure~\ref{fig:all-optimal-bicycles} indicates that the gradient of the HQM in the search space with respect to design speed may not be very constant or that we may be finding local optima in the search. If the former is true, designing a single bicycle with either adjustable geometry that is speed dependent or with a steer-by-wire system that can manipulate the dynamics to match these designs becomes difficult. It is also not clear whether the rider would feel comfortable with the change in lateral dynamics of a given design as speed increased or decreased. Another optimization approach would be to find a set of bicycles that have an equivalently low handling quality metric for each speed, which might possibly produce more continuity between designs. It is definitely worth investigating further the effects of speed on handling.   
+The lack of continuity of the parameters of the optimal bicycles at adjacent
+design speeds in Figure~\ref{fig:all-optimal-bicycles} indicates that the
+gradient of the HQM in the search space with respect to design speed may not be
+very constant or that we may be finding local optima in the search. If the
+former is true, designing a single bicycle with either adjustable geometry that
+is speed dependent or with a steer-by-wire system that can manipulate the
+dynamics to match these designs becomes difficult. It is also not clear whether
+the rider would feel comfortable with the change in lateral dynamics of a given
+design as speed increased or decreased. Another optimization approach would be
+to find a set of bicycles that have an equivalently low handling quality metric
+for each speed, which might possibly produce more continuity between designs.
+It is definitely worth investigating further the effects of speed on handling.
 %
-Reference~\cite{Hess2012} showed that vehicle speed, $v$, has a strong effect on the handling quality metric, much more so than the differences in the physical parameters of the several real bicycle designs considered. In particular, the handling quality metric decreases dramatically with speed as shown in Figure~\ref{fig:hqm-vs-speed}.
+Reference~\cite{Hess2012} showed that vehicle speed, $v$, has a strong effect
+on the handling quality metric, much more so than the differences in the
+physical parameters of the several real bicycle designs considered. In
+particular, the handling quality metric decreases dramatically with speed as
+shown in Figure~\ref{fig:hqm-vs-speed}.
 %
 \begin{figure}
   \centering
@@ -301,7 +533,26 @@ Reference~\cite{Hess2012} showed that vehicle speed, $v$, has a strong effect on
   \label{fig:hqm-vs-speed}
 \end{figure}
 
-This then begs the question of whether a bicycle designed to have a minimum handling quality metric at a given speed will also have good handling qualities when ridden at other speeds or will it exhibit this or another trend with respect to speed? Figure~\ref{fig:hqm-vs-speed-optimal} shows the speed dependence of the peak HQM for the five bicycle designs shown in Figure~\ref{fig:all-optimal-bicycles}. The decrease in HQM with speed is evident in most of the bicycles, but only the \SIlist{2;10}{\meter\per\second} designs reflect the same smooth trends as Figure~\ref{fig:hqm-vs-speed}. The other designs are difficult to find controllers for at all the shown speeds using the method described in Section~\ref{sec:controller-description} and the discovered controllers give more erratic peak values of the handling quality metric. All the optimal designs except for the one at 2~\si{\meter\per\second} have lower handling quality metrics than the real bicycles in Figure~\ref{fig:hqm-vs-speed}. The 2~\si{\meter\per\second} bicycle has a peak HQM of about 7 but at higher speeds the peak HQM is worse than the real bicycles shown in Figure~\ref{fig:hqm-vs-speed}. This also indicates that the handling quality metric surface in the parameter search space may have steep frequent valleys or that it is not necessarily smooth due to the non-linearities produced by the gain selection algorithm. Improvements to the robustness of the controller gain selection would help answer this question.
+This then begs the question of whether a bicycle designed to have a minimum
+handling quality metric at a given speed will also have good handling qualities
+when ridden at other speeds or will it exhibit this or another trend with
+respect to speed? Figure~\ref{fig:hqm-vs-speed-optimal} shows the speed
+dependence of the peak HQM for the five bicycle designs shown in
+Figure~\ref{fig:all-optimal-bicycles}. The decrease in HQM with speed is
+evident in most of the bicycles, but only the \SIlist{2;10}{\meter\per\second}
+designs reflect the same smooth trends as Figure~\ref{fig:hqm-vs-speed}. The
+other designs are difficult to find controllers for at all the shown speeds
+using the method described in Section~\ref{sec:controller-description} and the
+discovered controllers give more erratic peak values of the handling quality
+metric. All the optimal designs except for the one at 2~\si{\meter\per\second}
+have lower handling quality metrics than the real bicycles in
+Figure~\ref{fig:hqm-vs-speed}. The 2~\si{\meter\per\second} bicycle has a peak
+HQM of about 7 but at higher speeds the peak HQM is worse than the real
+bicycles shown in Figure~\ref{fig:hqm-vs-speed}. This also indicates that the
+handling quality metric surface in the parameter search space may have steep
+frequent valleys or that it is not necessarily smooth due to the
+non-linearities produced by the gain selection algorithm. Improvements to the
+robustness of the controller gain selection would help answer this question.
 %
 \begin{figure}
   \centering
@@ -310,31 +561,90 @@ This then begs the question of whether a bicycle designed to have a minimum hand
   \label{fig:hqm-vs-speed-optimal}
 \end{figure}
 
-The design speed and the speed at which the particular design is traveling have strong influences on the handling quality metric. This speed dependence must be taken into account when designing a bicycle for good handling. It also may not be possible to design a bicycle that has optimal handling at every desired travel speed.
+The design speed and the speed at which the particular design is traveling have
+strong influences on the handling quality metric. This speed dependence must be
+taken into account when designing a bicycle for good handling. It also may not
+be possible to design a bicycle that has optimal handling at every desired
+travel speed.
 
 \subsection{Unintuitive Optimal Geometry}
 %
-One of the advantages of approaching this problem from a optimization perspective is that combinations of physical parameters that are less than intuitive may be discovered. For example, the bicycle designs found for \SIlist{4;5;10}{\meter\per\second} have substantial negative trail, which is rarely seen in common bicycle designs. Most designs assume that a small amount of positive trail is ideal. Only the 2~\si{\meter\per\second} design has a significantly odd wheelbase with respect to standard designs, although some of the optimal designs have long wheelbases which are close to that of a tandem bicycle. Front wheel diameters ranging from 0.037\si{\meter} to 0.490~\si{\meter} were discovered. The very small diameters would likely not be implemented on a real bicycle due to the size of obstacles one must traverse. No negative values of steer axis tilt were discovered for optimal handling but interestingly a very large laid back angle was found for the 5~\si{\meter\per\second} bicycle and a very steep small angle for the 6~\si{\meter\per\second} bicycle. It is not yet apparent why very different geometries are found for nearly equal design speeds.
+One of the advantages of approaching this problem from a optimization
+perspective is that combinations of physical parameters that are less than
+intuitive may be discovered. For example, the bicycle designs found for
+\SIlist{4;5;10}{\meter\per\second} have substantial negative trail, which is
+rarely seen in common bicycle designs. Most designs assume that a small amount
+of positive trail is ideal. Only the 2~\si{\meter\per\second} design has a
+significantly odd wheelbase with respect to standard designs, although some of
+the optimal designs have long wheelbases which are close to that of a tandem
+bicycle. Front wheel diameters ranging from 0.037\si{\meter} to
+0.490~\si{\meter} were discovered. The very small diameters would likely not be
+implemented on a real bicycle due to the size of obstacles one must traverse.
+No negative values of steer axis tilt were discovered for optimal handling but
+interestingly a very large laid back angle was found for the
+5~\si{\meter\per\second} bicycle and a very steep small angle for the
+6~\si{\meter\per\second} bicycle. It is not yet apparent why very different
+geometries are found for nearly equal design speeds.
 
-The discovered optimal bicycles are, in general, physically realizable bicycles and not too wildly different than the safety bicycle design that is most common. A broader search of the 25 plant parameters could find other unexpected bicycle designs. There do exist various real bicycles that have odd geometry (e.g. low-riders, recumbents, tandems, tall-bikes) and riders find them varying in difficulty to command and maneuver. It would be interesting to learn whether any of these existing bicycles come close to the optimal predicted designs.
+The discovered optimal bicycles are, in general, physically realizable bicycles
+and not too wildly different than the safety bicycle design that is most
+common. A broader search of the 25 plant parameters could find other unexpected
+bicycle designs. There do exist various real bicycles that have odd geometry
+(e.g. low-riders, recumbents, tandems, tall-bikes) and riders find them varying
+in difficulty to command and maneuver. It would be interesting to learn whether
+any of these existing bicycles come close to the optimal predicted designs.
 
 % TODO : Bonus...find out what an optimal handling bicycle would look like with gravity on the moon.
 
 \section{CONCLUSION}
 %
-The approach we have taken to find an optimal handling bicycle is attractive for many reasons. The analytical nature of the presented method provides a straightforward computation to assess handling. With the addition of optimization this provides a bicycle designer with a tool to home in on bicycles that give optimal lateral handling characteristics. As far as we know, there presently do not exist any tools that give the designer the ability to evaluate how well a given design will suit the rider.
+The approach we have taken to find an optimal handling bicycle is attractive
+for many reasons. The analytical nature of the presented method provides a
+straightforward computation to assess handling. With the addition of
+optimization this provides a bicycle designer with a tool to home in on
+bicycles that give optimal lateral handling characteristics. As far as we know,
+there presently do not exist any tools that give the designer the ability to
+evaluate how well a given design will suit the rider.
 
-This theoretical approach hinges on the HQM being a good predictor of the subjective feelings of a rider. One obvious next step is to build some or all of the bicycles that were found which would permit human riders to assess their actual lateral handling qualities. Our theory relies heavily on the correlation of the HQM with pilot ratings of hand manipulated SISO tracking tasks, so further experimentation is needed to confirm this correlation for single track vehicles. A realistic simulator or variable parameter bicycle would allow more extensive experimental handling studies to be done, the results of which could be compared to our HQM directly to corroborate the correlations. These might more strongly validate the use of the handling quality metric for the case of the bicycle. 
+This theoretical approach hinges on the HQM being a good predictor of the
+subjective feelings of a rider. One obvious next step is to build some or all
+of the bicycles that were found which would permit human riders to assess their
+actual lateral handling qualities. Our theory relies heavily on the correlation
+of the HQM with pilot ratings of hand manipulated SISO tracking tasks, so
+further experimentation is needed to confirm this correlation for single track
+vehicles. A realistic simulator or variable parameter bicycle would allow more
+extensive experimental handling studies to be done, the results of which could
+be compared to our HQM directly to corroborate the correlations. These might
+more strongly validate the use of the handling quality metric for the case of
+the bicycle.
 
-The method can also be enhanced by increasing the dimension of the physical parameter search space. With a larger search space and an expanded set of important constraints that keep the bicycle design bounded to physically realizable models, one may discover very different designs than we have presented here. There are also details in the controller gain selection that can be improved to increase the robustness of the numerical algorithm.
+The method can also be enhanced by increasing the dimension of the physical
+parameter search space. With a larger search space and an expanded set of
+important constraints that keep the bicycle design bounded to physically
+realizable models, one may discover very different designs than we have
+presented here. There are also details in the controller gain selection that
+can be improved to increase the robustness of the numerical algorithm.
 
-Other future work could include creating an adjustable parameter bicycle, with consequent variable handling qualities, even allowing the physical dimensions of the bicycle to change as speed increases and decreases. The method presented here could help when designing the target configurations for the various speeds. One could also create a plant model based on a fixed bicycle design paired with a steer-by-wire controller. One could then search the controller parameter space to give a desired handling quality metric, thus providing a method of designing assistive controllers for single track vehicles.
+Other future work could include creating an adjustable parameter bicycle, with
+consequent variable handling qualities, even allowing the physical dimensions
+of the bicycle to change as speed increases and decreases. The method presented
+here could help when designing the target configurations for the various
+speeds. One could also create a plant model based on a fixed bicycle design
+paired with a steer-by-wire controller. One could then search the controller
+parameter space to give a desired handling quality metric, thus providing a
+method of designing assistive controllers for single track vehicles.
 
-We see the present work as a step forward in answering how a manually-controlled vehicle's physical properties affect the ease of manipulation and control for the human operator. We believe that it can provide a practical means of assessing bicycle designs in ways that have not previously possible.
+We see the present work as a step forward in answering how a
+manually-controlled vehicle's physical properties affect the ease of
+manipulation and control for the human operator. We believe that it can provide
+a practical means of assessing bicycle designs in ways that have not previously
+possible.
 
 \section{REPRODUCIBILITY}
 %
-All of the source code, data, and documents needed to reproduce the presented results and this paper can be found at the repository hosted at \url{https://github.com/moorepants/BMD2016}.
+All of the source code, data, and documents needed to reproduce the presented
+results and this paper can be found at the repository hosted at
+\url{https://github.com/moorepants/BMD2016}.
 
 \bibliographystyle{unsrt}
 \bibliography{references}
