@@ -1,0 +1,12 @@
+.reveal {
+	font-size: 200%;
+}
+.reveal li {
+	margin: 1em 0;
+}
+.reveal table, tr, td {
+	border: 0;
+}
+.ref p {
+	font-size:0.5em;
+}

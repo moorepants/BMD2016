@@ -19,9 +19,13 @@ params = {'axes.labelsize': 8,
 plt.rcParams.update(params)
 
 speed = '05'
+
+bicycle_name = 'Optimal{}'.format(speed)
+#bicycle_name = 'Falkorheadonbenchmark'
+
 benchmark = bp.Bicycle('Benchmark',
                        pathToData='/home/moorepants/src/BicycleParameters/data')
-optimal = bp.Bicycle('Optimal{}'.format(speed), pathToData='data')
+optimal = bp.Bicycle(bicycle_name, pathToData='data')
 
 fig = plt.figure()
 
@@ -49,6 +53,7 @@ bp.plot_eigenvalues([benchmark, optimal], speeds, ax=axes[1],
 
 axes[1].set_ylim((-10, 15))
 l = axes[1].legend(['Benchmark', 'Optimal @ 5 m/s'])
+#l = axes[1].legend(['Benchmark', 'Falkor @ 5 m/s'])
 l.remove()
 axes[1].set_ylabel('Real & Imaginary\nParts of the\nEigenvalues [1/s]')
 
@@ -57,6 +62,7 @@ axes[1].set_ylabel('Real & Imaginary\nParts of the\nEigenvalues [1/s]')
 benchmark_hqm_data = np.loadtxt('data/hqmbenchmark.csv'.format(speed),
                                 delimiter=',')
 optimal_hqm_data = np.loadtxt('data/hqm{}.csv'.format(speed), delimiter=',')
+#optimal_hqm_data = np.loadtxt('data/hqm-falkor.csv', delimiter=',')
 
 axes[2].plot(*benchmark_hqm_data.T, color='grey')
 axes[2].plot(*optimal_hqm_data.T, color='black')
@@ -64,6 +70,10 @@ axes[2].set_title('Handling Quality Metric @ 5.0 m/s')
 axes[2].set_xlabel('Frequency [rad/s]')
 axes[2].set_ylabel('HQM')
 axes[2].legend(['Benchmark', 'Optimal @ 5 m/s'])
+#axes[2].legend(['Benchmark', 'Falkor @ 5 m/s'])
 
 plt.tight_layout()
 plt.savefig('figures/example-optimal-bicycle.pdf')
+plt.savefig('figures/example-optimal-bicycle.png', dpi=300)
+#plt.savefig('figures/falkor-results.pdf')
+#plt.savefig('figures/falkor-results.png', dpi=300)
