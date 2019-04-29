@@ -37,25 +37,31 @@ class RigidBody2(RigidBody):
 #
 #I_t = U.parallel_axis(to) + L.parallel_axis(to)
 
+# F: earth reference frame
+# H: front assembly (handlebar and fork)
+# D: dragon head
+# T: combined dragon head and fron assembly
 
 # this models the head simply as a single cuboid
 inch_per_meter = 0.0254
 ipm = inch_per_meter
 
 w = symbols('w')
-lz, lx, ly = symbols('lz, lx, ly')  # dimensions of falkor lzead cuboid
-xH, yH, zH = symbols('x_H, y_H, z_H')  # front assembly
-xT, yT, zT = symbols('x_T, y_T, z_T')  # dragon + front assembly
+lz, lx, ly = symbols('lz, lx, ly')  # dimensions of falkor head cuboid
+xH, yH, zH = symbols('x_H, y_H, z_H')  # front assembly CoM location
+xT, yT, zT = symbols('x_T, y_T, z_T')  # dragon + front assembly CoM location
 mD, mH, mT = symbols('m_D, m_H, m_T')
 IHxx, IHyy, IHzz, IHxz = symbols('I_Hxx, I_Hyy, I_Hzz, I_Hxz')
 
 F = ReferenceFrame('F')
 
-IH = inertia(F, IHxx, IHyy, IHzz, izx=IHxz)
-ID = mD / 12 * inertia(F, lz**2 + ly**2, lz**2 + lx**2, lx**2 + ly**2)
+IH = inertia(F, IHxx, IHyy, IHzz, izx=IHxz)  # central inertia of front assembly
+ID = mD / 12 * inertia(F, lz**2 + ly**2, lz**2 + lx**2, lx**2 + ly**2)  # central inertia of dragon head
 
-o = Point('o')  # bicycle origin (contact of rear lylzeel)
+o = Point('o')  # bicycle origin (contact of rear wheel)
+# locate the mass center of the handlebar assembly with respect to origin
 Ho = o.locatenew('Ho', xH * F.x + yH * F.y + zH * F.z)
+# locate the mass center of the dragon head  with respect to origin
 Do = o.locatenew('D_o', (w + 7.5 * ipm) * F.x - (27.5 + 9.0) * ipm * F.z)
 To = o.locatenew('T_o', (mD * Do.pos_from(o) + mH * Ho.pos_from(o)) / (mD + mH))
 
